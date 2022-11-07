@@ -1,19 +1,55 @@
-﻿@inherits LayoutComponentBase
+﻿@inherits BlazorServerApp.Layouts.MainLayoutComponent
 
-<PageTitle>BlazorServerApp</PageTitle>
+@using Radzen
+@using Radzen.Blazor
+@using BlazorServerApp.Pages
+<RadzenDialog />
+<RadzenNotification />
+<RadzenTooltip />
+<RadzenContextMenu />
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+<RadzenLayout>
+    <ChildContent>
+        <RadzenHeader>
+            <ChildContent>
+                <div class="row justify-content-start align-items-center">
+                    <div class="col-6 d-flex align-items-center">
+                        <RadzenSidebarToggle Click="@SidebarToggle0Click">
+                        </RadzenSidebarToggle>
+                        <RadzenLabel Text="BlazorServerApp">
+                        </RadzenLabel>
+                    </div>
+                    <div class="col-6 text-right">
+                    </div>
+                </div>
+            </ChildContent>
+        </RadzenHeader>
+        <RadzenBody @ref="body0">
+            <ChildContent>
+                <RadzenContentContainer Name="main">
+                    @Body
+                </RadzenContentContainer>
+            </ChildContent>
+        </RadzenBody>
+        <RadzenSidebar @ref="sidebar0">
+            <ChildContent>
+                <RadzenPanelMenu style="height: 100%;">
+                    <ChildContent>
+                        <RadzenPanelMenuItem Icon="home" Text="Home" Path="/">
+                        </RadzenPanelMenuItem>
+                        <RadzenPanelMenuItem Icon="" Text="Counter" Path="/counter">
+                        </RadzenPanelMenuItem>
+                        <RadzenPanelMenuItem Icon="" Text="Fetch data" Path="/fetchdata">
+                        </RadzenPanelMenuItem>
+                    </ChildContent>
+                </RadzenPanelMenu>
+            </ChildContent>
+        </RadzenSidebar>
+        <RadzenFooter>
+            <ChildContent>
+                <RadzenLabel Text="BlazorServerApp, Copyright Ⓒ 2022">
+                </RadzenLabel>
+            </ChildContent>
+        </RadzenFooter>
+    </ChildContent>
+</RadzenLayout>
