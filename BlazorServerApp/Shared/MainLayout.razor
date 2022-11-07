@@ -3,12 +3,34 @@
 @using Radzen
 @using Radzen.Blazor
 @using BlazorServerApp.Pages
+@using BlazorServerApp.Data
+@inject LoginInfoService LoginInfoService
+
 <RadzenDialog />
 <RadzenNotification />
 <RadzenTooltip />
 <RadzenContextMenu />
 
-<RadzenLayout>
+<RadzenBody style="margin-left: 0px" Visible=@IsLogin>
+    <ChildContent>
+        <div class="row justify-content-center">
+            <div class="justify-content-center col-xl-5 col-md-7">
+                <RadzenCard class="d-flex p-0 rz-border-radius-4 rz-shadow-10 " Style="margin-top: 8rem; width: 100%; flex-direction: column; overflow: hidden; align-items: stretch;">
+                    <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-background-color-info p-5" style="text-align: center;">
+                        <RadzenText TextStyle="TextStyle.DisplayH3" TagName="TagName.H2" Class="rz-color-white mb-0">Login</RadzenText>
+                    </RadzenCard>
+                    <RadzenCard Class="rz-shadow-0 p-5">
+                        <RadzenTemplateForm Data=@("SimpleLogin")>
+                            <RadzenLogin AllowRegister="false" AllowResetPassword="true" Login=@(args => OnLogin(args))  />
+                        </RadzenTemplateForm>
+                    </RadzenCard>
+                </RadzenCard>
+            </div>
+        </div>
+    </ChildContent>
+</RadzenBody>
+
+<RadzenLayout Visible=@(!IsLogin)>
     <ChildContent>
         <RadzenHeader>
             <ChildContent>
@@ -53,3 +75,21 @@
         </RadzenFooter>
     </ChildContent>
 </RadzenLayout>
+
+@code {
+    bool IsLogin = true;
+    async Task OnLogin(LoginArgs args)
+    {
+        var allUser = await LoginInfoService.GetLoginInfoAsync();
+        var getUser = allUser.Where(x => x.UserName == args.Username && x.Password == args.Password);
+        if (getUser.Any())
+        {
+            // ユーザーが取得できたためLogin
+            IsLogin = false;
+        }
+        else
+        {
+            // ユーザーが取得できなかったためNG
+        }
+    }
+}
