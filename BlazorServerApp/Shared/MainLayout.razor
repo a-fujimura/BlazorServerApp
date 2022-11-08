@@ -5,6 +5,7 @@
 @using BlazorServerApp.Pages
 @using BlazorServerApp.Data
 @inject LoginInfoService LoginInfoService
+@inject NotificationService NotificationService
 
 <RadzenDialog />
 <RadzenNotification />
@@ -86,10 +87,23 @@
         {
             // ユーザーが取得できたためLogin
             IsLogin = false;
+            ShowNotification(NotificationSeverity.Success, "ログイン成功", "ログインに成功しました。");
         }
         else
         {
             // ユーザーが取得できなかったためNG
+            ShowNotification(NotificationSeverity.Error, "ログイン失敗", "ログインに失敗しました。");
         }
+    }
+
+    void ShowNotification(NotificationSeverity severity, string summary, string detail)
+    {
+        NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = severity,
+                Summary = summary,
+                Detail = detail,
+                Duration = 3000
+            });
     }
 }
