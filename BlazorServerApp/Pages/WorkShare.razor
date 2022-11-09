@@ -1,0 +1,79 @@
+﻿@page "/workshare/{userId}/{loginId}"
+@using Radzen
+@using Radzen.Blazor
+@using BlazorServerApp.Data
+@inject WorkShareService WorkShareService
+
+<div class="col-12" style="height:5%;">
+    <RadzenButton Text="読込" Icon="refresh" Click=@Read_Click></RadzenButton>
+    <RadzenButton Text="保存" Icon="save_alt" Click=@Save_Click></RadzenButton>
+</div>
+
+<RadzenHtmlEditor @bind-Value=@value class="w-100" style="height:95%;font-family:Source Han Code JP;">
+    <RadzenHtmlEditorUndo />
+    <RadzenHtmlEditorRedo />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorFontSize />
+    <RadzenHtmlEditorColor />
+    <RadzenHtmlEditorBackground />
+    <RadzenHtmlEditorCustomTool>
+        <Template Context="editor">
+            <RadzenButton Icon=title Style="color:red; background-color:transparent;" Click=@(args => OnExecute("UpdateRedFormat",editor))></RadzenButton>
+        </Template>
+    </RadzenHtmlEditorCustomTool>
+    <RadzenHtmlEditorCustomTool>
+        <Template Context="editor">
+            <RadzenButton Icon=title Style="color:blue; background-color:transparent;" Click=@(args => OnExecute("UpdateBlueFormat",editor))></RadzenButton>
+        </Template>
+    </RadzenHtmlEditorCustomTool>
+    <RadzenHtmlEditorCustomTool>
+        <Template Context="editor">
+            <RadzenButton Icon=title Style="color:black; background-color:transparent;" Click=@(args => OnExecute("UpdateBlackFormat",editor))></RadzenButton>
+        </Template>
+    </RadzenHtmlEditorCustomTool>
+    <RadzenHtmlEditorRemoveFormat />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorBold />
+    <RadzenHtmlEditorItalic />
+    <RadzenHtmlEditorUnderline />
+    <RadzenHtmlEditorStrikeThrough />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorAlignLeft />
+    <RadzenHtmlEditorAlignCenter />
+    <RadzenHtmlEditorAlignRight />
+    <RadzenHtmlEditorJustify />
+    <RadzenHtmlEditorSeparator />
+
+</RadzenHtmlEditor>
+
+@code {
+    string value = string.Empty;
+    [Parameter]
+    public string? loginId { get; set; }
+    [Parameter]
+    public string? userId { get; set; }
+
+    async Task Read_Click()
+    {
+    }
+
+    async Task Save_Click()
+    {
+    }
+
+    async Task OnExecute(string type, RadzenHtmlEditor editor)
+    {
+        if (type == "UpdateRedFormat")
+        {
+            await editor.ExecuteCommandAsync(HtmlEditorCommands.Color, $"rgba(255,0,0,100)");
+        }
+        else if (type == "UpdateBlueFormat")
+        {
+            await editor.ExecuteCommandAsync(HtmlEditorCommands.Color, $"rgba(0,0,255,100)");
+        }
+        else if (type == "UpdateBlackFormat")
+        {
+            await editor.ExecuteCommandAsync(HtmlEditorCommands.Color, $"rgba(0,0,0,100)");
+        }
+    }
+}
