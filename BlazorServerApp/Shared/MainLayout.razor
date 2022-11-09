@@ -64,6 +64,12 @@
                         </RadzenPanelMenuItem>
                         <RadzenPanelMenuItem Icon="" Text="Fetch data" Path="/fetchdata">
                         </RadzenPanelMenuItem>
+                        <RadzenPanelMenuItem Icon="" Text="作業共有">
+                            @foreach (var i in allUser)
+                            {
+                                <RadzenPanelMenuItem Text=@i.UserName Path=@($"workshare/{i.Id.ToString()}/{loginUser.Id.ToString()}")></RadzenPanelMenuItem>
+                            }
+                        </RadzenPanelMenuItem>
                     </ChildContent>
                 </RadzenPanelMenu>
             </ChildContent>
@@ -79,15 +85,24 @@
 
 @code {
     bool IsLogin = true;
+    IList<LoginInfo> allUser = new List<LoginInfo>();
+    LoginInfo loginUser = new LoginInfo();
+
+    protected override async Task OnInitializedAsync()
+    {
+        allUser = await LoginInfoService.GetLoginInfoAsync();
+    }
+
     async Task OnLogin(LoginArgs args)
     {
-        var allUser = await LoginInfoService.GetLoginInfoAsync();
         var getUser = allUser.Where(x => x.UserName == args.Username && x.Password == args.Password);
         if (getUser.Any())
         {
             // ユーザーが取得できたためLogin
             IsLogin = false;
             ShowNotification(NotificationSeverity.Success, "ログイン成功", "ログインに成功しました。");
+            loginUser = getUser.ToList()[0];
+            StateHasChanged();
         }
         else
         {
