@@ -6,6 +6,7 @@
 @using BlazorServerApp.Data
 @inject LoginInfoService LoginInfoService
 @inject NotificationService NotificationService
+@inject NavigationManager NavigationManager
 
 <RadzenDialog />
 <RadzenNotification />
@@ -102,6 +103,7 @@
             IsLogin = false;
             ShowNotification(NotificationSeverity.Success, "ログイン成功", "ログインに成功しました。");
             loginUser = getUser.ToList()[0];
+            NavigationManager.NavigateTo("/");
             StateHasChanged();
         }
         else

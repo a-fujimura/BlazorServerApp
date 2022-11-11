@@ -5,8 +5,8 @@
 @inject WorkShareService WorkShareService
 
 <div class="col-12" style="height:5%;">
-    <RadzenButton Text="読込" Icon="refresh" Click=@Read_Click></RadzenButton>
-    <RadzenButton Text="保存" Icon="save_alt" Click=@Save_Click></RadzenButton>
+    <RadzenButton Text="読込" Icon="refresh" Click=Read_Click Disabled=@(!isLogin)></RadzenButton>
+    <RadzenButton Text="保存" Icon="save_alt" Click=Save_Click Disabled=@(!isLogin)></RadzenButton>
 </div>
 
 <RadzenHtmlEditor @bind-Value=@value class="w-100" style="height:95%;font-family:Source Han Code JP;">
@@ -47,18 +47,31 @@
 </RadzenHtmlEditor>
 
 @code {
+    bool isLogin = false;
     string value = string.Empty;
     [Parameter]
     public string? loginId { get; set; }
     [Parameter]
     public string? userId { get; set; }
 
+    protected override async void OnParametersSet()
+    {
+        isLogin = (loginId == userId);
+        var get = await WorkShareService.GetWorkShareAsync(int.Parse(userId));
+        value = get.Content;
+        StateHasChanged();
+    }
+
     async Task Read_Click()
     {
+        var get = await WorkShareService.GetWorkShareAsync(int.Parse(userId));
+        value = get.Content;
     }
 
     async Task Save_Click()
     {
+        var set = new Data.WorkShare() { Id = int.Parse(userId), Content = value }; 
+        await WorkShareService.SetWorkShareAsync(set);
     }
 
     async Task OnExecute(string type, RadzenHtmlEditor editor)
