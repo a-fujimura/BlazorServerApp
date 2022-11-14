@@ -39,6 +39,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
